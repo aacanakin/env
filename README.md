@@ -1,6 +1,6 @@
 # env: Parse environment variables, map to structs
 
-![Go](https://github.com/aacanakin/env/workflows/Go/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/aacanakin/env)](https://goreportcard.com/report/github.com/aacanakin/env)
+![Go](https://github.com/aacanakin/env/workflows/Go/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/aacanakin/env)](https://goreportcard.com/report/github.com/aacanakin/env) [![Coverage Status](https://coveralls.io/repos/github/aacanakin/env/badge.svg?branch=master)](https://coveralls.io/github/aacanakin/env?branch=master)
 
 env is a mapper from environment variables to structs
 

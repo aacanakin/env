@@ -2,7 +2,7 @@
 
 ![Go](https://github.com/aacanakin/env/workflows/Go/badge.svg)
 
-env is a mapper for environment variables to structs
+env is a mapper from environment variables to structs
 
 ## Features
 
@@ -17,6 +17,8 @@ env is a mapper for environment variables to structs
 ### Install
 
 ```sh
+// Requires go1.15+
+
 go get github.com/aacanakin/env
 ```
 
@@ -29,14 +31,16 @@ package main
 import "fmt"
 import "github.com/aacanakin/env"
 
+type Config struct {
+  Host string
+  Port int
+  Debug bool
+}
+
 func main() {
-  type Config struct {
-    Host string
-    Port int
-    Debug bool
-  }
 
   var c Config
+
   err := env.Parse(&c)
   if err != nil {
     panic(err)
@@ -76,6 +80,7 @@ func main() {
   }
 
   var c Config
+
   err := env.Parse(&c)
   if err != nil {
     panic(err)
@@ -143,4 +148,50 @@ DB_HOST=localhost DB_PORT=3306 SERVICE_DEBUG=true go run main.go
 DB Host:  localhost
 DB Port:  3345
 Service Debug:  true
+```
+
+### Using with .env
+
+Install
+
+```sh
+go get github.com/joho/godotenv
+```
+
+Create a .env file
+
+```sh
+# .env
+HOST=localhost
+PORT=8081
+```
+
+```go
+// main.go
+package main
+
+import (
+  "github.com/joho/godotenv"
+  "github.com/aacanakin/env"
+  "log"
+)
+
+type Config struct {
+  Host string
+  Port uint16
+}
+
+func main() {
+  err := godotenv.Load()
+  if err != nil {
+    log.Fatal("Error loading .env file")
+  }
+
+  var c Config
+
+  err = env.Parse(&c)
+
+  log.Println("Host: ", c.Host)
+  log.Println("Port: ", c.Port)
+}
 ```

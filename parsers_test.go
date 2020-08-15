@@ -527,6 +527,26 @@ func (s *ParsersTestSuite) TestParseFieldErr() {
 	assert.NotNil(s.T(), err)
 }
 
+func (s *ParsersTestSuite) TestParseSubStructFieldErr() {
+
+	os.Setenv("STR_FIELD", "strVal")
+	os.Setenv("SUB_BOOL_FIELD", "text")
+
+	type subconfig struct {
+		SubBoolField bool `env:"SUB_BOOL_FIELD"`
+	}
+
+	type config struct {
+		StrField string
+		subconfig
+	}
+
+	var c config
+	err := Parse(&c)
+
+	assert.NotNil(s.T(), err)
+}
+
 func TestParsersTestSuite(t *testing.T) {
 	suite.Run(t, new(ParsersTestSuite))
 }

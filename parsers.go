@@ -62,7 +62,6 @@ func parseUint(bitSize int) FieldParser {
 		case reflect.Uint64:
 			return field.Set(uintVal)
 		default:
-			field.Set(0)
 			return fmt.Errorf("Unsupported type while parsing uint kind: %s", field.Kind())
 		}
 
@@ -135,9 +134,14 @@ type Parser interface {
 func parseField(field *structs.Field) error {
 
 	if field.Kind() == reflect.Struct {
+		var err error
 		for _, f := range field.Fields() {
-			return parseField(f)
+			err = parseField(f)
+			if err != nil {
+				return err
+			}
 		}
+		return err
 	}
 
 	tagVal := field.Tag("env")

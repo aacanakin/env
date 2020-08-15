@@ -52,7 +52,7 @@ func main() {
 }
 ```
 
-Run;
+Run
 
 ```sh
 $ HOST=localhost PORT=8081 debug=true go run main.go
@@ -91,6 +91,8 @@ func main() {
   fmt.Println("Debug: ", c.Debug)
 }
 ```
+
+Run
 
 ```sh
 SERVICE_HOST=localhost SERVICE_PORT=8081 SERVICE_DEBUG=true go run main.go
@@ -146,7 +148,7 @@ DB_HOST=localhost DB_PORT=3306 SERVICE_DEBUG=true go run main.go
 
 // Output
 DB Host:  localhost
-DB Port:  3345
+DB Port:  3306
 Service Debug:  true
 ```
 

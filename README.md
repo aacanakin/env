@@ -1,4 +1,6 @@
-# env: Simple environment variable parser/mapper
+# env: Parse environment variables, map to structs
+
+![Go](https://github.com/aacanakin/env/workflows/Go/badge.svg)
 
 env is a mapper for environment variables to structs
 

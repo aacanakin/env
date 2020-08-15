@@ -19,28 +19,28 @@ func (s *ParserTestSuite) TestParseStruct() {
 	os.Setenv("STR_FIELD", "strFieldValue")
 	os.Setenv("INT_FIELD", "123")
 	os.Setenv("INT64_FIELD", "9223372036854775807")
-	// os.Setenv("SUB_STR_FIELD", "subStrFieldValue")
+	os.Setenv("SUB_STR_FIELD", "subStrFieldValue")
 
-	// type SubConfig struct {
-	// 	SubStrField string `env:"SUB_STR_FIELD"`
-	// }
+	type SubConfig struct {
+		SubStrField string `env:"SUB_STR_FIELD"`
+	}
 
 	type Config struct {
-		BoolField  bool   `env:"BOOL_FIELD"`
-		StrField   string `env:"STR_FIELD"`
-		IntField   int    `env:"INT_FIELD"`
-		Int64Field int64  `env:"INT64_FIELD"`
-		// SubConfigField SubConfig
+		BoolField bool   `env:"BOOL_FIELD"`
+		StrField  string `env:"STR_FIELD"`
+		// IntField       int    `env:"INT_FIELD"`
+		// Int64Field     int64  `env:"INT64_FIELD"`
+		SubConfigField SubConfig
 	}
 
 	var c Config
 
 	err := Parse(&c)
 
-	assert.Nil(s.T(), err)
-
 	fmt.Printf("config: %+v\n", c)
 	fmt.Printf("err: %s\n", err)
+
+	assert.Nil(s.T(), err)
 
 }
 

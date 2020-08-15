@@ -197,3 +197,8 @@ func main() {
   log.Println("Port: ", c.Port)
 }
 ```
+
+## Roadmap
+
+- [ ] omitempty tag constraint
+- [ ] Provide a read only config example with custom conf package

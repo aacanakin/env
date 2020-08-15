@@ -19,8 +19,7 @@ func parseBool(field *structs.Field, val string) error {
 	if err != nil {
 		return err
 	}
-	field.Set(boolVal)
-	return nil
+	return field.Set(boolVal)
 }
 
 func parseString(field *structs.Field, val string) error {
@@ -46,13 +45,27 @@ func parseInt(bitSize int) FieldParser {
 	}
 }
 
-func parseUInt(bitSize int) FieldParser {
+func parseUint(bitSize int) FieldParser {
 	return func(field *structs.Field, val string) error {
 		uintVal, err := strconv.ParseUint(val, 10, bitSize)
 		if err != nil {
 			return err
 		}
-		return field.Set(uintVal)
+
+		switch field.Kind() {
+		case reflect.Uint8:
+			return field.Set(uint8(uintVal))
+		case reflect.Uint16:
+			return field.Set(uint16(uintVal))
+		case reflect.Uint32:
+			return field.Set(uint32(uintVal))
+		case reflect.Uint64:
+			return field.Set(uintVal)
+		default:
+			field.Set(0)
+			return fmt.Errorf("Unsupported type while parsing uint kind: %s", field.Kind())
+		}
+
 	}
 }
 
@@ -62,7 +75,15 @@ func parseFloat(bitSize int) FieldParser {
 		if err != nil {
 			return err
 		}
-		return field.Set(floatVal)
+
+		switch field.Kind() {
+		case reflect.Float32:
+			return field.Set(float32(floatVal))
+		case reflect.Float64:
+			return field.Set(float64(floatVal))
+		default:
+			return fmt.Errorf("Unsupported type while parsing float kind: %s", field.Kind())
+		}
 	}
 }
 
@@ -72,8 +93,15 @@ func parseComplex(bitSize int) FieldParser {
 		if err != nil {
 			return err
 		}
-		field.Set(complexVal)
-		return nil
+
+		switch field.Kind() {
+		case reflect.Complex64:
+			return field.Set(complex64(complexVal))
+		case reflect.Complex128:
+			return field.Set(complex128(complexVal))
+		default:
+			return fmt.Errorf("Unsupported type while parsing complex kind: %s", field.Kind())
+		}
 	}
 }
 
@@ -88,11 +116,11 @@ var mappers = Mapper{
 	reflect.Int16:      parseInt(16),
 	reflect.Int32:      parseInt(32),
 	reflect.Int64:      parseInt(64),
-	reflect.Uint:       parseUInt(32),
-	reflect.Uint8:      parseUInt(8),
-	reflect.Uint16:     parseUInt(16),
-	reflect.Uint32:     parseUInt(32),
-	reflect.Uint64:     parseUInt(64),
+	reflect.Uint:       parseUint(32),
+	reflect.Uint8:      parseUint(8),
+	reflect.Uint16:     parseUint(16),
+	reflect.Uint32:     parseUint(32),
+	reflect.Uint64:     parseUint(64),
 	reflect.Float32:    parseFloat(32),
 	reflect.Float64:    parseFloat(64),
 	reflect.Complex64:  parseComplex(64),
@@ -147,8 +175,6 @@ func Parse(c interface{}) error {
 	s := structs.New(c)
 
 	for _, field := range s.Fields() {
-		// fmt.Printf("<Field name=%s, kind=%s tag=%s />\n", field.Name(), field.Kind().String(), field.Tag(`env`))
-
 		err := parseField(field)
 		if err != nil {
 			return err

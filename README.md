@@ -262,7 +262,7 @@ func main() {
 
 ```
 
-This looks like it's not very idiomatic go. Feedbacks here are welcome.
+NOTE: This looks like it's not very idiomatic go. Feedbacks here are welcome.
 
 ## Roadmap
 

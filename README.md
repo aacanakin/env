@@ -198,6 +198,72 @@ func main() {
 }
 ```
 
+### Readonly config
+
+Since it's a good practice to keep environment variables immutable, it will be also a good practice to keep the parsed struct immutable too. However, Go's reflect package doesn't allow setting unexported fields. So,
+to keep the struct immutable;
+
+- Create a config package
+
+```go
+package config
+
+import "github.com/aacanakin/env"
+
+type conf struct {
+	Host string
+	Port uint16
+}
+
+type Config struct {
+	conf conf
+}
+
+func (c Config) Host() string {
+	return c.conf.Host
+}
+
+func (c Config) Port() uint16 {
+	return c.conf.Port
+}
+
+func New() (*Config, error) {
+	var c conf
+	err := env.Parse(&c)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Config{c}, nil
+}
+```
+
+- Use it in your main.go
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/aacanakin/env_test/config"
+)
+
+func main() {
+	c, err := config.New()
+	if err != nil {
+		panic(err)
+	}
+
+  // HERE, c.conf is not accessible
+	fmt.Println("Host:", c.Host())
+	fmt.Println("Port:", c.Port())
+}
+
+```
+
+This looks like it's not very idiomatic go. Feedbacks here are welcome.
+
 ## Roadmap
 
 - [ ] `omitempty` tag constraint
@@ -205,3 +271,4 @@ func main() {
 - [ ] Ability to customize tag key (default is env)
 - [ ] Provide an instance based parser
 - [ ] Provide a read only config example with custom conf package
+- [ ] Release v0.1

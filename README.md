@@ -200,5 +200,8 @@ func main() {
 
 ## Roadmap
 
-- [ ] omitempty tag constraint
+- [ ] `omitempty` tag constraint
+- [ ] `file` tag constraint
+- [ ] Ability to customize tag key (default is env)
+- [ ] Provide an instance based parser
 - [ ] Provide a read only config example with custom conf package

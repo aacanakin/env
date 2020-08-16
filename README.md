@@ -250,14 +250,14 @@ import (
 )
 
 func main() {
-	c, err := config.New()
-	if err != nil {
-		panic(err)
-	}
+  c, err := config.New()
+  if err != nil {
+    panic(err)
+  }
 
   // HERE, c.conf is not accessible
-	fmt.Println("Host:", c.Host())
-	fmt.Println("Port:", c.Port())
+  fmt.Println("Host:", c.Host())
+  fmt.Println("Port:", c.Port())
 }
 
 ```
